@@ -25,6 +25,8 @@ cp .env.example .env
 
 And then fill your credentials and recipient addresses
 
+> we also supports `Cc`, `Bcc` and `Reply-To`!
+
 After that, run any of this command:
 
 ```bash
