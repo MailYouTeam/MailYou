@@ -15,6 +15,7 @@ MAIL_FROM = os.getenv("MAIL_FROM", SMTP_USER)
 MAIL_TO = os.getenv("MAIL_TO")
 MAIL_CC = os.getenv("MAIL_CC", "")
 MAIL_BCC = os.getenv("MAIL_BCC", "")
+MAIL_REPLY_TO = os.getenv("MAIL_REPLY_TO", "")
 
 EMAIL_FILE = "email.txt"
 
@@ -65,6 +66,7 @@ def main():
     to_addrs = parse_addresses(MAIL_TO)
     cc_addrs = parse_addresses(MAIL_CC)
     bcc_addrs = parse_addresses(MAIL_BCC)
+    reply_to_addrs = parse_addresses(MAIL_REPLY_TO)
 
     msg = EmailMessage()
     msg["From"] = MAIL_FROM
@@ -73,6 +75,9 @@ def main():
 
     if cc_addrs:
         msg["Cc"] = ", ".join(cc_addrs)
+
+    if reply_to_addrs:
+        msg["Reply-To"] = ", ".join(reply_to_addrs)
 
 
     msg.set_content(body)
@@ -95,6 +100,8 @@ def main():
             summary += f" | CC: {', '.join(cc_addrs)}"
         if bcc_addrs:
             summary += f" | BCC: {', '.join(bcc_addrs)}"
+        if reply_to_addrs:
+            summary += f" | Reply-To: {', '.join(reply_to_addrs)}"
         print(f"Email sent successfully! ({summary})")
 
 
