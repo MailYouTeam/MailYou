@@ -25,7 +25,7 @@ cp .env.example .env
 
 And then fill your credentials and recipient addresses
 
-> we also supports `Cc`, `Bcc` and `Reply-To`!
+> we also supports `Cc`, `Bcc`, `Reply-To` and attachment!
 
 After that, run any of this command:
 
