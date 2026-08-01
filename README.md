@@ -25,7 +25,7 @@ cp .env.example .env
 
 And then fill your credentials and recipient addresses
 
-> we also supports `Cc`, `Bcc`, `Reply-To` and attachment!
+> We also supports **Cc**, **Bcc**, **Reply-To** and attachment! Simply fill it in `.env` file
 
 After that, run any of this command:
 
@@ -77,7 +77,7 @@ Thank you.
 
 - `Hello,` to `Thank you.` is basically the email body
 
-> **fyi**, we handle linebreak automatically by injecting `\n` starting from **line 3** and so on
+> **FYI**, we handle linebreak automatically by injecting `\n` starting from **line 3** and so on
 
 ## Contributing
 
