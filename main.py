@@ -1,3 +1,4 @@
+import mimetypes
 import os
 import smtplib
 from email.message import EmailMessage
@@ -16,12 +17,35 @@ MAIL_TO = os.getenv("MAIL_TO")
 MAIL_CC = os.getenv("MAIL_CC", "")
 MAIL_BCC = os.getenv("MAIL_BCC", "")
 MAIL_REPLY_TO = os.getenv("MAIL_REPLY_TO", "")
+MAIL_ATTACHMENTS = os.getenv("MAIL_ATTACHMENTS", "")
 
 EMAIL_FILE = "email.txt"
 
 
 def parse_addresses(value: str) -> list[str]:
     return [addr.strip() for addr in value.split(",") if addr.strip()]
+
+
+def parse_attachments(value: str) -> list[str]:
+    paths = [p.strip() for p in value.split(",") if p.strip()]
+    for path in paths:
+        if not os.path.exists(path):
+            raise ValueError(path, "Not found")
+        if not os.path.isfile(path):
+            raise ValueError(path, "Path is not a file")
+    return paths
+
+
+def attach_files(msg: EmailMessage, paths: list[str]) -> None:
+    for path in paths:
+        mime_type, _ = mimetypes.guess_type(path)
+        if mime_type is None:
+            mime_type = "application/octet-stream"
+        maintype, subtype = mime_type.split("/", 1)
+        filename = os.path.basename(path)
+        with open(path, "rb") as f:
+            msg.add_attachment(f.read(), maintype=maintype, subtype=subtype, filename=filename)
+        print(f"Attached: {filename} ({mime_type})")
 
 
 def parse_email_file(path: str) -> tuple[str, str]:
@@ -63,6 +87,13 @@ def main():
         print(f"Error reading '{EMAIL_FILE}':\n{e}")
         return
 
+    try:
+        attachment_paths = parse_attachments(MAIL_ATTACHMENTS)
+    except ValueError as e:
+        path, err = e.args
+        print(f"Attachment error for '{path}':\n{err}")
+        return
+
     to_addrs = parse_addresses(MAIL_TO)
     cc_addrs = parse_addresses(MAIL_CC)
     bcc_addrs = parse_addresses(MAIL_BCC)
@@ -81,6 +112,10 @@ def main():
 
 
     msg.set_content(body)
+
+
+    if attachment_paths:
+        attach_files(msg, attachment_paths)
 
     all_recipients = to_addrs + cc_addrs + bcc_addrs
 
@@ -102,6 +137,8 @@ def main():
             summary += f" | BCC: {', '.join(bcc_addrs)}"
         if reply_to_addrs:
             summary += f" | Reply-To: {', '.join(reply_to_addrs)}"
+        if attachment_paths:
+            summary += f" | Attachments: {len(attachment_paths)}"
         print(f"Email sent successfully! ({summary})")
 
 
