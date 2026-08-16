@@ -1,3 +1,4 @@
+import argparse
 import mimetypes
 import os
 import smtplib
@@ -18,8 +19,6 @@ MAIL_CC = os.getenv("MAIL_CC", "")
 MAIL_BCC = os.getenv("MAIL_BCC", "")
 MAIL_REPLY_TO = os.getenv("MAIL_REPLY_TO", "")
 MAIL_ATTACHMENTS = os.getenv("MAIL_ATTACHMENTS", "")
-
-EMAIL_FILE = "email.txt"
 
 
 def parse_addresses(value: str) -> list[str]:
@@ -77,14 +76,30 @@ def parse_email_file(path: str) -> tuple[str, str]:
     return subject, body
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Send an email from the CLI"
+    )
+    parser.add_argument(
+        "-t", "--target",
+        required=True,
+        metavar="FILE",
+        help="Path to the email file (e.g. email.txt)",
+    )
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
+    email_file = args.target
+
     if not all([SMTP_SERVER, SMTP_USER, SMTP_PASS, MAIL_TO]):
         raise RuntimeError("Missing SMTP configuration in .env")
 
     try:
-        subject, body = parse_email_file(EMAIL_FILE)
+        subject, body = parse_email_file(email_file)
     except ValueError as e:
-        print(f"Error reading '{EMAIL_FILE}':\n{e}")
+        print(f"Error reading '{email_file}':\n{e}")
         return
 
     try:
