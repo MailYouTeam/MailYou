@@ -45,7 +45,7 @@ And then run `python3 main.py -t email.txt` to send them
 
 > `python3 main.py --target email.txt` is also valid
 
-We use `-t` or `--target` to specify the path of the email file, so it's not necessary to name them `email.txt`
+We use `-t` or `--target` to specify the path of the email file, so it's not necessary to name them all `email.txt`
 
 ### How to write the email (Especially if you used `touch`)
 
