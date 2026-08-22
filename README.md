@@ -30,38 +30,51 @@ And then fill your credentials and recipient addresses
 After that, run any of this command:
 
 ```bash
-cp email.txt.example email.txt # Use our email template (Easiest)
+cp email.txt.example email.txt # Use our plain text template
 ```
 
-Or
+Or for an HTML email:
 
 ```bash
-touch email.txt # If you wanna write them yourself
+cp email.html.example email.html # Use our HTML template
 ```
 
-To change the email subject and content, simply edit the `email.txt` (If you used `touch`, refer below!)
+Or basically write your own from scratch:
 
-And then run `python3 main.py -t email.txt` to send them
+```bash
+touch email.txt  # plain text
+touch email.html # HTML
+```
 
-> `python3 main.py --target email.txt` is also valid
+The file extension determines how the email is sent: `.txt` sends as plain text, `.html` sends as HTML. Any other extension will produce an error
 
-We use `-t` or `--target` to specify the path of the email file, so it's not necessary to name them all `email.txt`
+And then run `python3 main.py -t FILE` to send them
+
+`FILE` is your email file name
+
+> `python3 main.py --target FILE` is also valid
+
+We use `-t` or `--target` to specify the path of the email file, so it's not necessary to name them all `email.txt` or `email.html`
 
 ### How to write the email (Especially if you used `touch`)
 
-The script (`main.py`) parse email exactly like these:
+The script (`main.py`) parses email files exactly like these:
 
-- **Line 1** is subject
-- **Line 2** is a separator
+- **Line 1** is the subject
+- **Line 2** is a separator (must be blank)
 - **Line 3+** is the email body
 
 > For subject and email body, you can always leave them blank if you don't want any, but **line 2** must always be blank
 
 > If any of these requirements are not satisfied, the script will print an error and won't send
 
-### Example email
+---
 
-This is example of valid `email.txt`:
+This structure is the same for both `.txt` and `.html` files. The only difference is that **line 3 onward is treated as raw HTML** when using a `.html` file
+
+### Example plain text email
+
+This is an example of a valid `email.txt`:
 
 ```
 Sample Message
@@ -73,15 +86,31 @@ Lorem ipsum style placeholder email content for testing purposes
 Thank you.
 ```
 
-#### Breakdown
+### Example HTML email
 
-- `Sample Message` is the subject
+This is an example of a valid `email.html`:
 
-- Between `Sample Message` and `Hello,` is the separator
+```
+Sample Message
 
-- `Hello,` to `Thank you.` is basically the email body
+<html>
+  <body>
+    <p>Hello</p>
+    <p>Lorem ipsum style placeholder email content for testing purposes</p>
+    <p>Thank you</p>
+  </body>
+</html>
+```
 
-> **FYI**, we handle linebreak automatically by injecting `\n` starting from **line 3** and so on
+#### Breakdown (applies to both formats)
+
+- **Line 1** `Sample Message` is the subject
+
+- **Line 2** (blank) is the separator
+
+- **Line 3+** is the body: plain text for `.txt`, raw HTML markup for `.html`
+
+> **FYI**, for plain text emails we handle linebreaks automatically by injecting `\n` starting from **line 3** and so on. For HTML emails, your markup controls all formatting
 
 ## Contributing
 
