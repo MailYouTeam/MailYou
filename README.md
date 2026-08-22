@@ -65,7 +65,7 @@ The script (`main.py`) parses email files exactly like these:
 - **Line 3+** is the email body
 
 > For subject and email body, you can always leave them blank if you don't want any, but **line 2** must always be blank
-
+>
 > If any of these requirements are not satisfied, the script will print an error and won't send
 
 ---
