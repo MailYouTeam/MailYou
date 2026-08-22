@@ -47,10 +47,20 @@ def attach_files(msg: EmailMessage, paths: list[str]) -> None:
         print(f"Attached: {filename} ({mime_type})")
 
 
-def parse_email_file(path: str) -> tuple[str, str]:
+def parse_email_file(path: str) -> tuple[str, str, str]:
     if not os.path.exists(path):
         raise ValueError(
             "Email file not found"
+        )
+
+    ext = os.path.splitext(path)[1].lower()
+    if ext == ".html":
+        content_type = "html"
+    elif ext == ".txt":
+        content_type = "plain"
+    else:
+        raise ValueError(
+            "Unsupported file type"
         )
 
     with open(path, "r", encoding="utf-8") as f:
@@ -64,7 +74,7 @@ def parse_email_file(path: str) -> tuple[str, str]:
     subject = lines[0].strip()
 
     if len(lines) == 1:
-        return subject, ""
+        return subject, "", content_type
 
     if lines[1].strip() != "":
         raise ValueError(
@@ -73,7 +83,7 @@ def parse_email_file(path: str) -> tuple[str, str]:
 
     body = "\n".join(lines[2:]).strip()
 
-    return subject, body
+    return subject, body, content_type
 
 
 def parse_args() -> argparse.Namespace:
@@ -97,7 +107,7 @@ def main():
         raise RuntimeError("Missing SMTP configuration in .env")
 
     try:
-        subject, body = parse_email_file(email_file)
+        subject, body, content_type = parse_email_file(email_file)
     except ValueError as e:
         print(f"Error reading '{email_file}':\n{e}")
         return
@@ -126,7 +136,7 @@ def main():
         msg["Reply-To"] = ", ".join(reply_to_addrs)
 
 
-    msg.set_content(body)
+    msg.set_content(body, subtype=content_type)
 
 
     if attachment_paths:
