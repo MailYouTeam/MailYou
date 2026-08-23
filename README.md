@@ -1,4 +1,4 @@
-# MailMe
+# MailYou
 
 Send emails straight from your CLI!
 
@@ -7,8 +7,8 @@ Send emails straight from your CLI!
 Clone the repo:
 
 ```bash
-git clone https://github.com/aiadam36/MailMe.git
-cd MailMe
+git clone https://github.com/aiadam36/MailYou.git
+cd MailYou
 ```
 
 Install dependencies:
