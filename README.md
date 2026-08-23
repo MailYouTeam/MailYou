@@ -30,13 +30,13 @@ And then fill your credentials and recipient addresses
 After that, run any of this command:
 
 ```bash
-cp email.txt.example email.txt # Use our plain text template
+cp examples/email.txt email.txt # Use our plain text template
 ```
 
 Or for an HTML email:
 
 ```bash
-cp email.html.example email.html # Use our HTML template
+cp examples/email.html email.html # Use our HTML template
 ```
 
 Or basically write your own from scratch:
