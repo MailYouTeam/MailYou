@@ -114,4 +114,4 @@ Sample Message
 
 ## Contributing
 
-Feel free to fork and open a PR
+We're restricting PR access, sorry.
