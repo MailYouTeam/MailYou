@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mailyou"
+version = "0.1.0"
+description = "Send emails straight from your CLI"
+requires-python = ">=3.10"
+dependencies = [
+    "python-dotenv>=1.2.2",
+]
+
+[project.scripts]
+mailyou = "mailyou.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
