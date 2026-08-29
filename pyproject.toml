@@ -6,6 +6,8 @@ build-backend = "setuptools.build_meta"
 name = "mailyou"
 version = "0.1.0"
 description = "Send emails straight from your CLI"
+license = "PolyForm-Noncommercial-1.0.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
     "python-dotenv>=1.2.2",
