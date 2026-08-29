@@ -14,7 +14,7 @@ cd MailYou
 Install dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip install .
 ```
 
 Configure the `.env`:
@@ -48,17 +48,17 @@ touch email.html # HTML
 
 The file extension determines how the email is sent: `.txt` sends as plain text, `.html` sends as HTML. Any other extension will produce an error
 
-And then run `python3 main.py -t FILE` to send them
+And then run `mailyou -t FILE` to send them
 
 `FILE` is your email file name
 
-> `python3 main.py --target FILE` is also valid
+> `mailyou --target FILE` is also valid
 
 We use `-t` or `--target` to specify the path of the email file, so it's not necessary to name them all `email.txt` or `email.html`
 
 ### How to write the email (Especially if you used `touch`)
 
-The script (`main.py`) parses email files exactly like these:
+The script parses email files exactly like these:
 
 - **Line 1** is the subject
 - **Line 2** is a separator (must be blank)
