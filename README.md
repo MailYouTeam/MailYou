@@ -1,3 +1,6 @@
+> [!WARNING]
+> Keep in mind, the instructions below still work as they are, but we're currently moving to a modern approach (PyPI)
+
 # MailYou
 
 Send emails straight from your CLI!
