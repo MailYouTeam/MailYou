@@ -10,7 +10,7 @@ Send emails straight from your CLI!
 Clone the repo:
 
 ```bash
-git clone https://github.com/aiadam36/MailYou.git
+git clone https://github.com/MailYouTeam/MailYou.git
 cd MailYou
 ```
 
