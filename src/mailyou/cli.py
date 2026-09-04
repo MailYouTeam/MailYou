@@ -1,53 +1,44 @@
 from __future__ import annotations
 
-import argparse
-import sys
+import typer
 
 from .config import Config
 from .parser import parse_email_file
 from .sender import send
 
+app = typer.Typer(name="mailyou", help="Send an email from the CLI")
 
-def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        prog="mailyou",
-        description="Send an email from the CLI",
-    )
-    parser.add_argument(
+
+@app.command()
+def main(
+    target: str = typer.Option(
+        ...,
         "-t", "--target",
-        required=True,
         metavar="FILE",
         help="Path to the email file (.txt or .html)",
-    )
-    return parser.parse_args(argv)
-
-
-def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv)
-
+    ),
+) -> None:
     try:
         config = Config.from_env()
     except (EnvironmentError, ValueError) as exc:
-        print(f"Configuration error: {exc}", file=sys.stderr)
-        return 1
+        typer.echo(f"Configuration error: {exc}", err=True)
+        raise typer.Exit(code=1)
 
     try:
-        subject, body, content_type = parse_email_file(args.target)
+        subject, body, content_type = parse_email_file(target)
     except (FileNotFoundError, ValueError) as exc:
-        print(f"Error reading {args.target!r}: {exc}", file=sys.stderr)
-        return 1
+        typer.echo(f"Error reading {target!r}: {exc}", err=True)
+        raise typer.Exit(code=1)
 
     try:
         send(subject, body, content_type, config)
     except (FileNotFoundError, ValueError) as exc:
-        print(f"Attachment error: {exc}", file=sys.stderr)
-        return 1
+        typer.echo(f"Attachment error: {exc}", err=True)
+        raise typer.Exit(code=1)
     except Exception as exc:
-        print(f"Failed to send email: {exc}", file=sys.stderr)
-        return 1
-
-    return 0
+        typer.echo(f"Failed to send email: {exc}", err=True)
+        raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    app()
