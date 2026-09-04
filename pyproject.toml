@@ -11,6 +11,7 @@ license = "PolyForm-Noncommercial-1.0.0"
 license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
+    "platformdirs>=4.0",
     "python-dotenv>=1.2.2",
     "typer>=0.12",
 ]

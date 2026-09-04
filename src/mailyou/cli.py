@@ -19,8 +19,8 @@ def main(
     ),
 ) -> None:
     try:
-        config = Config.from_env()
-    except (EnvironmentError, ValueError) as exc:
+        config = Config.from_config()
+    except (FileNotFoundError, EnvironmentError, ValueError) as exc:
         typer.echo(f"Configuration error: {exc}", err=True)
         raise typer.Exit(code=1)
 

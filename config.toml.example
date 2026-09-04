@@ -1,0 +1,7 @@
+# MailYou config file
+# Place this at: ~/.config/mailyou/config.toml
+
+[smtp]
+server = "smtp.example.com"
+port   = 587
+user   = "john@example.com"
