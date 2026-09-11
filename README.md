@@ -1,5 +1,5 @@
 > [!WARNING]
-> Keep in mind, the instructions below still work as they are, but we're currently moving to a modern approach (PyPI)
+> Keep in mind, the instructions below may or may not work. We're currently moving to a modern approach (PyPI)
 
 # MailYou
 
