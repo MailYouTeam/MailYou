@@ -18,8 +18,10 @@ def main(
         help="Path to the email file (.txt or .html)",
     ),
 ) -> None:
+    smtp_pass = typer.prompt("SMTP password", hide_input=True)
+
     try:
-        config = Config.from_config()
+        config = Config.from_config(smtp_pass=smtp_pass)
     except (FileNotFoundError, EnvironmentError, ValueError) as exc:
         typer.echo(f"Configuration error: {exc}", err=True)
         raise typer.Exit(code=1)

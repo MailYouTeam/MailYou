@@ -41,7 +41,7 @@ class Config:
     mail_attachments: list[str] = field(default_factory=list)
 
     @classmethod
-    def from_config(cls, dotenv_path: str | None = None) -> "Config":
+    def from_config(cls, smtp_pass: str, dotenv_path: str | None = None) -> "Config":
         smtp = _read_toml_smtp()
 
         smtp_server = smtp.get("server", "")
@@ -66,16 +66,11 @@ class Config:
 
         load_dotenv(dotenv_path)
 
-        smtp_pass = os.getenv("SMTP_PASS", "")
         mail_to = _load_addresses("MAIL_TO")
 
-        missing_env = (
-            ["SMTP_PASS"] if not smtp_pass else []
-        ) + ([] if mail_to else ["MAIL_TO"])
-
-        if missing_env:
+        if not mail_to:
             raise EnvironmentError(
-                f"Missing required .env variable(s): {', '.join(missing_env)}"
+                "Missing required .env variable(s): MAIL_TO"
             )
 
         raw_attachments = os.getenv("MAIL_ATTACHMENTS", "")
