@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-import os
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from dotenv import load_dotenv
 from platformdirs import user_config_dir
 
 _CONFIG_DIR = Path(user_config_dir("mailyou"))
@@ -20,11 +18,6 @@ def _read_toml_smtp() -> dict:
     with open(_CONFIG_FILE, "rb") as fh:
         data = tomllib.load(fh)
     return data.get("smtp", {})
-
-
-def _load_addresses(key: str) -> list[str]:
-    raw = os.getenv(key, "")
-    return [addr.strip() for addr in raw.split(",") if addr.strip()]
 
 
 @dataclass(frozen=True)
@@ -44,8 +37,12 @@ class Config:
     def from_config(
         cls,
         smtp_pass: str,
+        mail_to: list[str],
         mail_from_override: str | None = None,
-        dotenv_path: str | None = None,
+        mail_cc: list[str] | None = None,
+        mail_bcc: list[str] | None = None,
+        mail_reply_to: list[str] | None = None,
+        mail_attachments: list[str] | None = None,
     ) -> "Config":
         smtp = _read_toml_smtp()
 
@@ -69,18 +66,6 @@ class Config:
                 f"{', '.join(missing_toml)}"
             )
 
-        load_dotenv(dotenv_path)
-
-        mail_to = _load_addresses("MAIL_TO")
-
-        if not mail_to:
-            raise EnvironmentError(
-                "Missing required .env variable(s): MAIL_TO"
-            )
-
-        raw_attachments = os.getenv("MAIL_ATTACHMENTS", "")
-        attachment_paths = [p.strip() for p in raw_attachments.split(",") if p.strip()]
-
         toml_mail_from = smtp.get("mail_from", smtp_user)
         mail_from = mail_from_override if mail_from_override else toml_mail_from
 
@@ -91,8 +76,8 @@ class Config:
             smtp_pass=smtp_pass,
             mail_from=mail_from,
             mail_to=mail_to,
-            mail_cc=_load_addresses("MAIL_CC"),
-            mail_bcc=_load_addresses("MAIL_BCC"),
-            mail_reply_to=_load_addresses("MAIL_REPLY_TO"),
-            mail_attachments=attachment_paths,
+            mail_cc=mail_cc or [],
+            mail_bcc=mail_bcc or [],
+            mail_reply_to=mail_reply_to or [],
+            mail_attachments=mail_attachments or [],
         )
