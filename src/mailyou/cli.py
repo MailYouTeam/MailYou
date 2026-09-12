@@ -11,9 +11,8 @@ app = typer.Typer(name="mailyou", help="Send an email from the CLI")
 
 @app.command()
 def main(
-    target: str = typer.Option(
+    target: str = typer.Argument(
         ...,
-        "-t", "--target",
         metavar="FILE",
         help="Path to the email file (.txt or .html)",
     ),
