@@ -5,3 +5,5 @@
 server = "smtp.example.com"
 port   = 587
 user   = "john@example.com"
+
+# mail_from = "John Doe <john@example.com>"

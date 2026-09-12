@@ -41,7 +41,12 @@ class Config:
     mail_attachments: list[str] = field(default_factory=list)
 
     @classmethod
-    def from_config(cls, smtp_pass: str, dotenv_path: str | None = None) -> "Config":
+    def from_config(
+        cls,
+        smtp_pass: str,
+        mail_from_override: str | None = None,
+        dotenv_path: str | None = None,
+    ) -> "Config":
         smtp = _read_toml_smtp()
 
         smtp_server = smtp.get("server", "")
@@ -76,12 +81,15 @@ class Config:
         raw_attachments = os.getenv("MAIL_ATTACHMENTS", "")
         attachment_paths = [p.strip() for p in raw_attachments.split(",") if p.strip()]
 
+        toml_mail_from = smtp.get("mail_from", smtp_user)
+        mail_from = mail_from_override if mail_from_override else toml_mail_from
+
         return cls(
             smtp_server=smtp_server,
             smtp_port=smtp_port,
             smtp_user=smtp_user,
             smtp_pass=smtp_pass,
-            mail_from=os.getenv("MAIL_FROM", smtp_user),
+            mail_from=mail_from,
             mail_to=mail_to,
             mail_cc=_load_addresses("MAIL_CC"),
             mail_bcc=_load_addresses("MAIL_BCC"),

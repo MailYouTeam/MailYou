@@ -17,11 +17,17 @@ def main(
         metavar="FILE",
         help="Path to the email file (.txt or .html)",
     ),
+    mail_from: str | None = typer.Option(
+        None,
+        "--from",
+        metavar="SENDER",
+        help="Sender name and email address (e.g. John Doe <john@example.com>)",
+    ),
 ) -> None:
     smtp_pass = typer.prompt("SMTP password", hide_input=True)
 
     try:
-        config = Config.from_config(smtp_pass=smtp_pass)
+        config = Config.from_config(smtp_pass=smtp_pass, mail_from_override=mail_from)
     except (FileNotFoundError, EnvironmentError, ValueError) as exc:
         typer.echo(f"Configuration error: {exc}", err=True)
         raise typer.Exit(code=1)
