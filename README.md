@@ -42,7 +42,7 @@ cp config.toml.example ~/.config/mailyou/config.toml
 ```
 
 ```cmd
-# Windows
+REM Windows
 copy config.toml.example %APPDATA%\mailyou\config.toml
 ```
 
