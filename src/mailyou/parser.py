@@ -31,11 +31,6 @@ def parse_email_file(path: str) -> tuple[str, str, str]:
     if len(lines) == 1:
         return subject, "", content_type
 
-    if lines[1].strip() != "":
-        raise ValueError(
-            "Line 2 must be completely blank"
-        )
-
-    body = "\n".join(lines[2:])
+    body = "\n".join(lines[1:])
 
     return subject, body, content_type
