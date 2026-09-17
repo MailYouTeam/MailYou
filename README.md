@@ -111,14 +111,11 @@ mailyou email.html --to jane@example.com --from "Support Team <support@example.c
 The email file format is the same for both `.txt` and `.html`:
 
 - **Line 1** is the subject
-- **Line 2** is a separator (must be blank)
-- **Line 3+** is the email body
+- **Line 2+** is the email body
 
-> For subject and email body, you can always leave them blank if you don't want any, but **line 2** must always be blank
+> For subject and email body, you can always leave any of them blank if you want them to be empty
 
-If any of these requirements are not satisfied, `mailyou` will print an error and won't send
-
-This structure is the same for both `.txt` and `.html` files. The only difference is that **line 3 onward is treated as raw HTML** when using a `.html` file
+This structure is the same for both `.txt` and `.html` files. The only difference is that **line 2 onward is treated as raw HTML** when using a `.html` file
 
 ### Example plain text email
 
@@ -126,7 +123,6 @@ This is an example of a valid `email.txt`:
 
 ```
 Sample Message
-
 Hello,
 
 Lorem ipsum style placeholder email content for testing purposes
@@ -140,7 +136,6 @@ This is an example of a valid `email.html`:
 
 ```
 Sample Message
-
 <html>
   <body>
     <p>Hello</p>
@@ -154,11 +149,9 @@ Sample Message
 
 - **Line 1** `Sample Message` is the subject
 
-- **Line 2** (blank) is the separator
+- **Line 2+** is the body: plain text for `.txt`, raw HTML markup for `.html`
 
-- **Line 3+** is the body: plain text for `.txt`, raw HTML markup for `.html`
-
-> **FYI**, for plain text emails we handle linebreaks automatically by injecting `\n` starting from **line 3** and so on. For HTML emails, your markup controls all formatting
+> **FYI**, for plain text emails we handle linebreaks automatically by injecting `\n` starting from **line 2** and so on. For HTML emails, your markup controls all formatting
 
 ## Contributing
 
