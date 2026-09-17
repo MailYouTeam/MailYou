@@ -1,5 +1,4 @@
 Sample Message
-
 Hello,
 
 Lorem ipsum style placeholder email content for testing purposes
